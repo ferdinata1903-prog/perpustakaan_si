@@ -39,4 +39,12 @@ class PeminjamanController extends Controller
         return redirect()->route('peminjaman.index')
             ->with('success', 'Peminjaman berhasil dicatat.');
     }
+
+    // A4: Detail peminjaman tanpa pemeriksaan pemilik (IDOR)
+    public function show($id)
+    {
+        $peminjaman = Peminjaman::with(['anggota', 'buku'])->findOrFail($id);
+
+        return view('peminjaman.show', compact('peminjaman'));
+    }
 }

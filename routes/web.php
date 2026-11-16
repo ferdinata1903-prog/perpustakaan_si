@@ -21,6 +21,15 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    // A2: Pencarian buku rentan SQL Injection
+    Route::get('/buku-cari', [BukuController::class, 'cari'])->name('buku.cari');
+
+    // A3: Hapus buku via GET (rentan CSRF)
+    Route::get('/buku/{buku}/hapus', [BukuController::class, 'destroy'])->name('buku.hapus');
+
+    // A4: Detail peminjaman tanpa pemeriksaan pemilik (IDOR)
+    Route::get('/peminjaman/{id}', [PeminjamanController::class, 'show'])->name('peminjaman.show');
+
     // Daftar dan detail buku: semua role
     Route::get('/buku', [BukuController::class, 'index'])
         ->middleware('permission:lihat daftar buku')->name('buku.index');
