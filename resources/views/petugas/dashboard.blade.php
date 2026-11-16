@@ -20,7 +20,7 @@
         </div>
 
         <div class="mt-6 flex flex-wrap gap-3">
-            @can('kelola data buku')
+            @can('kelola-buku')
                 <a href="{{ route('buku.kelola') }}" class="px-4 py-2 bg-gray-800 text-white rounded">Kelola Buku</a>
             @endcan
             @can('kelola peminjaman')

@@ -25,7 +25,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/buku-cari', [BukuController::class, 'cari'])->name('buku.cari');
 
     // A3: Hapus buku aman menggunakan method DELETE
-    Route::delete('/buku/{buku}', [BukuController::class, 'destroy'])->name('buku.destroy');
+    Route::delete('/buku/{buku}', [BukuController::class, 'destroy'])
+        ->middleware('can:kelola-buku')->name('buku.destroy');
 
     // A4: Detail peminjaman tanpa pemeriksaan pemilik (IDOR)
     Route::get('/peminjaman/{id}', [PeminjamanController::class, 'show'])->name('peminjaman.show');
@@ -33,6 +34,8 @@ Route::middleware('auth')->group(function () {
     // Daftar dan detail buku: semua role
     Route::get('/buku', [BukuController::class, 'index'])
         ->middleware('permission:lihat daftar buku')->name('buku.index');
+    Route::get('/buku/create', [BukuController::class, 'create'])
+        ->middleware('can:kelola-buku')->name('buku.create');
     Route::get('/buku/{id}', [BukuController::class, 'show'])
         ->middleware('permission:lihat daftar buku')->name('buku.show');
 
@@ -40,9 +43,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/buku/{id}/pinjam', [PeminjamanSayaController::class, 'ajukan'])
         ->middleware('permission:mengajukan peminjaman buku')->name('buku.pinjam');
 
-    // Pengelolaan buku: admin dan petugas
+    // Pengelolaan buku: admin dan petugas via Gate kelola-buku
     Route::get('/kelola/buku', [BukuController::class, 'kelola'])
-        ->middleware('permission:kelola data buku')->name('buku.kelola');
+        ->middleware('can:kelola-buku')->name('buku.kelola');
 
     // Profil milik sendiri
     Route::get('/profile', [ProfileController::class, 'edit'])

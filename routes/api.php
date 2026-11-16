@@ -12,8 +12,8 @@ Route::middleware(['web', 'auth', 'permission:lihat daftar buku'])->group(functi
     Route::get('/buku/{id}', [BukuController::class, 'show'])->name('api.buku.show');
 });
 
-// Tambah, ubah, hapus buku: permission "kelola data buku"
-Route::middleware(['web', 'auth', 'permission:kelola data buku'])->group(function () {
+// Tambah, ubah, hapus buku: Gate kelola-buku
+Route::middleware(['web', 'auth', 'can:kelola-buku'])->group(function () {
     Route::post('/buku', [BukuController::class, 'store'])->name('api.buku.store');
     Route::put('/buku/{id}', [BukuController::class, 'update'])->name('api.buku.update');
     Route::delete('/buku/{id}', [BukuController::class, 'destroy'])->name('api.buku.destroy');

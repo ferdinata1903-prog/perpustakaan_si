@@ -12,8 +12,8 @@
         </div>
     @endif
 
-    @can('kelola data buku')
-        <p><a href="{{ route('buku.kelola') }}" class="btn btn-sm">Kelola Buku</a></p>
+    @can('kelola-buku')
+        <p><a href="{{ route('buku.create') }}" class="btn btn-sm">Tambah Buku</a></p>
     @endcan
 
     <table id="tabel-buku" style="width:100%; margin-top:1.5rem; border-collapse: collapse;">
@@ -35,7 +35,7 @@
                     <td style="padding: 8px;">{{ $buku['tahun'] }}</td>
                     <td style="padding: 8px;">
                         <a href="{{ route('buku.show', $buku['id']) }}" class="btn btn-outline btn-sm">Detail</a>
-                        @can('kelola data buku')
+                        @can('kelola-buku')
                             <form action="{{ route('buku.destroy', $buku['id']) }}" method="POST" style="display: inline-block; margin-left: 8px;" onsubmit="return confirm('Yakin ingin menghapus buku ini?')">
                                 @csrf
                                 @method('DELETE')

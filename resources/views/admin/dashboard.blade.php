@@ -27,7 +27,7 @@
             @can('kelola role pengguna')
                 <a href="{{ route('admin.users.index') }}" class="px-4 py-2 bg-gray-800 text-white rounded">Kelola Pengguna dan Role</a>
             @endcan
-            @can('kelola data buku')
+            @can('kelola-buku')
                 <a href="{{ route('buku.kelola') }}" class="px-4 py-2 bg-gray-800 text-white rounded">Kelola Buku</a>
             @endcan
             @can('kelola peminjaman')

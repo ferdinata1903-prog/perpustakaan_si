@@ -26,8 +26,8 @@
     <div class="container">
         <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Beranda</a>
         <a href="{{ route('buku.index') }}" class="{{ request()->routeIs('buku.*') ? 'active' : '' }}">Daftar Buku</a>
-        @can('kelola data buku')
-        <a href="{{ route('buku.kelola') }}" class="{{ request()->routeIs('buku.kelola') ? 'active' : '' }}">Kelola Buku</a>
+        @can('kelola-buku')
+        <a href="{{ route('buku.kelola') }}" class="{{ request()->routeIs('buku.kelola', 'buku.create') ? 'active' : '' }}">Kelola Buku</a>
         @endcan
 
         <div class="nav-auth">

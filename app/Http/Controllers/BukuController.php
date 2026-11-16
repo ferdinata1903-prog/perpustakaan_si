@@ -59,4 +59,9 @@ class BukuController extends Controller
     {
         return view('buku.kelola');
     }
+
+    public function create()
+    {
+        return view('buku.kelola');
+    }
 }

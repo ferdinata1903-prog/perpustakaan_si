@@ -22,8 +22,8 @@
                         </x-nav-link>
                     @endcan
 
-                    @can('kelola data buku')
-                        <x-nav-link :href="route('buku.kelola')" :active="request()->routeIs('buku.kelola')">
+                    @can('kelola-buku')
+                        <x-nav-link :href="route('buku.kelola')" :active="request()->routeIs('buku.kelola', 'buku.create')">
                             Kelola Buku
                         </x-nav-link>
                     @endcan
@@ -121,8 +121,8 @@
                 </x-responsive-nav-link>
             @endcan
 
-            @can('kelola data buku')
-                <x-responsive-nav-link :href="route('buku.kelola')" :active="request()->routeIs('buku.kelola')">
+            @can('kelola-buku')
+                <x-responsive-nav-link :href="route('buku.kelola')" :active="request()->routeIs('buku.kelola', 'buku.create')">
                     Kelola Buku
                 </x-responsive-nav-link>
             @endcan
