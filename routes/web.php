@@ -21,11 +21,11 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    // A2: Pencarian buku rentan SQL Injection
+    // A2: Pencarian buku aman dengan parameter binding
     Route::get('/buku-cari', [BukuController::class, 'cari'])->name('buku.cari');
 
-    // A3: Hapus buku via GET (rentan CSRF)
-    Route::get('/buku/{buku}/hapus', [BukuController::class, 'destroy'])->name('buku.hapus');
+    // A3: Hapus buku aman menggunakan method DELETE
+    Route::delete('/buku/{buku}', [BukuController::class, 'destroy'])->name('buku.destroy');
 
     // A4: Detail peminjaman tanpa pemeriksaan pemilik (IDOR)
     Route::get('/peminjaman/{id}', [PeminjamanController::class, 'show'])->name('peminjaman.show');

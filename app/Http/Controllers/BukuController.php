@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\DB;
 
 class BukuController extends Controller
 {
-    // A2: Pencarian rentan SQL Injection
+    // A2: Pencarian aman dengan Query Parameter Binding
     public function cari(Request $request)
     {
         $judul = $request->query('judul', '');
-        $hasil = DB::select("SELECT * FROM bukus WHERE judul = '$judul'");
+        $hasil = DB::select("SELECT * FROM bukus WHERE judul = ?", [$judul]);
 
         return response()->json($hasil);
     }

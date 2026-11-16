@@ -30,13 +30,17 @@
             @forelse ($daftarBuku as $buku)
                 <tr style="border-bottom: 1px solid #e5e7eb;">
                     <td style="padding: 8px;">{{ $buku['kategori'] }}</td>
-                    <td style="padding: 8px;">{!! $buku['judul'] !!}</td>
+                    <td style="padding: 8px;">{{ $buku['judul'] }}</td>
                     <td style="padding: 8px;">{{ $buku['penulis'] }}</td>
                     <td style="padding: 8px;">{{ $buku['tahun'] }}</td>
                     <td style="padding: 8px;">
                         <a href="{{ route('buku.show', $buku['id']) }}" class="btn btn-outline btn-sm">Detail</a>
                         @can('kelola data buku')
-                            <a href="{{ route('buku.hapus', $buku['id']) }}" class="btn-hapus" style="color: #dc2626; margin-left: 8px; font-size: 0.875rem;">Hapus (GET)</a>
+                            <form action="{{ route('buku.destroy', $buku['id']) }}" method="POST" style="display: inline-block; margin-left: 8px;" onsubmit="return confirm('Yakin ingin menghapus buku ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" style="background: none; border: none; color: #dc2626; cursor: pointer; font-size: 0.875rem; text-decoration: underline;">Hapus</button>
+                            </form>
                         @endcan
                     </td>
                 </tr>
