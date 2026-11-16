@@ -19,9 +19,14 @@ class UserSeeder extends Seeder
         ];
 
         foreach ($akun as $data) {
-            $user = User::firstOrCreate(
+            // Penguatan keamanan: ganti password default admin bawaan seeder
+            $password = $data['role'] === 'admin'
+                ? Hash::make('AdminBaru104!')
+                : Hash::make('password123');
+
+            $user = User::updateOrCreate(
                 ['email' => $data['email']],
-                ['name' => $data['name'], 'password' => Hash::make('password123')]
+                ['name' => $data['name'], 'password' => $password]
             );
 
             $user->syncRoles($data['role']);
