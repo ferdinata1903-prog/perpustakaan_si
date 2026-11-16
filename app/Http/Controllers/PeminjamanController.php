@@ -6,6 +6,7 @@ use App\Models\Anggota;
 use App\Models\Buku;
 use App\Models\Peminjaman;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PeminjamanController extends Controller
 {
@@ -40,10 +41,12 @@ class PeminjamanController extends Controller
             ->with('success', 'Peminjaman berhasil dicatat.');
     }
 
-    // A4: Detail peminjaman tanpa pemeriksaan pemilik (IDOR)
+    // Detail peminjaman dilindungi PeminjamanPolicy
     public function show($id)
     {
         $peminjaman = Peminjaman::with(['anggota', 'buku'])->findOrFail($id);
+
+        Gate::authorize('view', $peminjaman);
 
         return view('peminjaman.show', compact('peminjaman'));
     }
