@@ -28,8 +28,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/buku/{buku}', [BukuController::class, 'destroy'])
         ->middleware('can:kelola-buku')->name('buku.destroy');
 
-    // A4: Detail peminjaman tanpa pemeriksaan pemilik (IDOR)
-    Route::get('/peminjaman/{id}', [PeminjamanController::class, 'show'])->name('peminjaman.show');
+    // Detail peminjaman: dilindungi PeminjamanPolicy (lihat controller).
+    // whereNumber agar '/peminjaman/create' tidak tertangkap sebagai {id}.
+    Route::get('/peminjaman/{id}', [PeminjamanController::class, 'show'])
+        ->whereNumber('id')->name('peminjaman.show');
 
     // Daftar dan detail buku: semua role
     Route::get('/buku', [BukuController::class, 'index'])
