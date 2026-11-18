@@ -52,7 +52,7 @@
                                     <div class="flex gap-3 items-center">
                                         <a href="{{ route('admin.users.edit', $user) }}" class="text-blue-600">Edit</a>
                                         <form method="POST" action="{{ route('admin.users.destroy', $user) }}"
-                                              onsubmit="return confirm('Hapus akun {{ $user->name }}?')">
+                                              onsubmit="return confirm('Hapus akun ini?')">
                                             @csrf
                                             @method('DELETE')
                                             <button class="text-red-600">Hapus</button>

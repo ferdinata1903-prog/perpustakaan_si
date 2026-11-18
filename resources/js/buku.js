@@ -44,7 +44,8 @@ async function loadBuku() {
         dataBukuSaatIni = json.data;
         renderTable(dataBukuSaatIni);
     } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="5">Terjadi kesalahan: ${err.message}</td></tr>`;
+        tbody.innerHTML = '<tr><td colspan="5"></td></tr>';
+        tbody.querySelector('td').textContent = `Terjadi kesalahan: ${err.message}`;
     }
 }
 
@@ -56,35 +57,58 @@ function renderTable(data) {
         return;
     }
 
-    tbody.innerHTML = '';
-    data.forEach(buku => {
-        const tombolKelola = bisaKelola
-            ? `
-                <button type="button" class="btn-ubah" data-id="${buku.id}">Ubah</button>
-                <button type="button" class="btn-hapus" data-id="${buku.id}">Hapus</button>
-              `
-            : '';
+    // PATCH A1: semua nilai dari API ditulis sebagai teks, bukan HTML.
+    // Jangan interpolasi judul/penulis/kategori ke dalam innerHTML.
+    tbody.replaceChildren();
 
+    data.forEach(buku => {
         const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${buku.kategori ?? '-'}</td>
-            <td>${buku.judul}</td>
-            <td>${buku.penulis}</td>
-            <td>${buku.tahun}</td>
-            <td>
-                <a href="/buku/${buku.id}">Detail</a>
-                ${tombolKelola}
-            </td>
-        `;
+
+        const tdKategori = document.createElement('td');
+        tdKategori.textContent = buku.kategori ?? '-';
+        tr.appendChild(tdKategori);
+
+        const tdJudul = document.createElement('td');
+        tdJudul.textContent = buku.judul;
+        tr.appendChild(tdJudul);
+
+        const tdPenulis = document.createElement('td');
+        tdPenulis.textContent = buku.penulis;
+        tr.appendChild(tdPenulis);
+
+        const tdTahun = document.createElement('td');
+        tdTahun.textContent = buku.tahun;
+        tr.appendChild(tdTahun);
+
+        const tdAksi = document.createElement('td');
+        const detail = document.createElement('a');
+        detail.href = `/buku/${encodeURIComponent(String(buku.id))}`;
+        detail.textContent = 'Detail';
+        tdAksi.appendChild(detail);
+
+        if (bisaKelola) {
+            const ubah = document.createElement('button');
+            ubah.type = 'button';
+            ubah.className = 'btn-ubah';
+            ubah.dataset.id = String(buku.id);
+            ubah.textContent = 'Ubah';
+            ubah.addEventListener('click', () => mulaiUbah(buku.id));
+            tdAksi.appendChild(ubah);
+
+            const hapus = document.createElement('button');
+            hapus.type = 'button';
+            hapus.className = 'btn-hapus';
+            hapus.dataset.id = String(buku.id);
+            hapus.textContent = 'Hapus';
+            hapus.addEventListener('click', () => hapusBuku(buku.id));
+            tdAksi.appendChild(hapus);
+        }
+
+        tr.appendChild(tdAksi);
         tbody.appendChild(tr);
     });
 
-    document.querySelectorAll('.btn-ubah').forEach(btn => {
-        btn.addEventListener('click', () => mulaiUbah(btn.dataset.id));
-    });
-    document.querySelectorAll('.btn-hapus').forEach(btn => {
-        btn.addEventListener('click', () => hapusBuku(btn.dataset.id));
-    });
+    // Listener dipasang saat elemen tombol dibuat, bukan melalui selector global.
 }
 
 function mulaiUbah(id) {
