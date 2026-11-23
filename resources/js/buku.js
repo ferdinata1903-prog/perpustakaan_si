@@ -12,13 +12,27 @@ function pesanError(res, json) {
     return json.message || 'Terjadi kesalahan.';
 }
 
+async function parseJsonRespon(res) {
+    const contentType = res.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) {
+        throw new Error(`Respon server bukan JSON (${res.status}). Kemungkinan sesi berakhir atau dialihkan.`);
+    }
+    return await res.json();
+}
+
 async function loadKategori() {
     if (!bisaKelola) return;
 
     try {
-        const res = await fetch(apiKategori, { headers: { Accept: 'application/json' } });
-        if (!res.ok) throw new Error('Gagal memuat kategori');
-        const json = await res.json();
+        const res = await fetch(apiKategori, {
+            credentials: 'same-origin',
+            headers: {
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        });
+        if (!res.ok) throw new Error(`Gagal memuat kategori (${res.status})`);
+        const json = await parseJsonRespon(res);
 
         const select = document.getElementById('kategori_id');
         json.data.forEach(k => {
@@ -37,10 +51,16 @@ async function loadBuku() {
     tbody.innerHTML = '<tr><td colspan="5">Memuat data...</td></tr>';
 
     try {
-        const res = await fetch(apiBuku, { headers: { Accept: 'application/json' } });
-        if (!res.ok) throw new Error('Gagal memuat data buku');
+        const res = await fetch(apiBuku, {
+            credentials: 'same-origin',
+            headers: {
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        });
+        if (!res.ok) throw new Error(`Gagal memuat data buku (${res.status})`);
 
-        const json = await res.json();
+        const json = await parseJsonRespon(res);
         dataBukuSaatIni = json.data;
         renderTable(dataBukuSaatIni);
     } catch (err) {
@@ -142,12 +162,14 @@ async function hapusBuku(id) {
     try {
         const res = await fetch(`${apiBuku}/${id}`, {
             method: 'DELETE',
+            credentials: 'same-origin',
             headers: {
                 Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
                 'X-CSRF-TOKEN': csrfToken,
             },
         });
-        const json = await res.json();
+        const json = await parseJsonRespon(res);
 
         if (!res.ok) {
             alert(pesanError(res, json));
@@ -182,15 +204,17 @@ if (bisaKelola) {
         try {
             const res = await fetch(url, {
                 method: method,
+                credentials: 'same-origin',
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
                     'X-CSRF-TOKEN': csrfToken,
                 },
                 body: JSON.stringify(payload),
             });
 
-            const json = await res.json();
+            const json = await parseJsonRespon(res);
 
             if (!res.ok) {
                 if (res.status === 422) {
