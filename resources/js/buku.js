@@ -1,5 +1,5 @@
-const apiBuku = '/api/buku';
-const apiKategori = '/api/kategori';
+const apiBuku = '/data/buku';
+const apiKategori = '/data/kategori';
 let dataBukuSaatIni = [];
 
 // Halaman /kelola/buku punya form; halaman /buku (read-only) tidak punya
