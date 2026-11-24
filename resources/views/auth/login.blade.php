@@ -1,4 +1,5 @@
 <x-guest-layout>
+    <h2 class="mb-4 text-lg font-semibold text-center">Login Library SI - 205441100104</h2>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
